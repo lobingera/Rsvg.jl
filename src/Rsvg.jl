@@ -11,7 +11,6 @@ using Docile
 
 @docstrings
 
-
 type RsvgHandle 
 	ptr::Ptr{Void}
 	    
@@ -31,35 +30,8 @@ function destroy(handle::RsvgHandle)
     nothing
 end
 
-# struct GError {
-#   GQuark       domain;
-#   gint         code;
-#   gchar       *message;
-# };
-#
-# The GError structure contains information about an error that has occurred.
-# Members
+GError = Gtk.GLib.GError
 
-# GQuark domain;
-# error domain, e.g. G_FILE_ERROR
-# gint code;
-# error code, e.g. G_FILE_ERROR_NOENT
-# gchar *message;
-# human-readable informative error message
-     
-
-type GError 
-    domain::Uint32
-    code::Int32
-    message::Ptr{Uint8}
-end
-
-#struct RsvgDimensionData {
-#    int width;
-#    int height;
-#    gdouble em;
-#    gdouble ex;
-#};
 type RsvgDimensionData
     width::Int32
     height::Int32
@@ -67,13 +39,29 @@ type RsvgDimensionData
     ex::Float64
 end
 
-
+RsvgDimensionData() = RsvgDimensionData(0,0,0,0)
 
 function rsvg_handle_get_dimensions(handle::RsvgHandle, dimension_data::RsvgDimensionData)
     ccall((:rsvg_handle_get_dimensions, _jl_librsvg), Void,
                 (RsvgHandle,Ptr{RsvgDimensionData}), handle, &dimension_data)
 end
 
+# rsvg_handle_set_dpi ()
+
+# void
+# rsvg_handle_set_dpi (RsvgHandle *handle,
+#                      double dpi);
+
+function rsvg_set_default_dpi(dpi::Float64)
+    ccall((:rsvg_set_default_dpi, _jl_librsvg), Void,
+                (Float64,), dpi)
+end
+
+
+function rsvg_handle_set_dpi(handle::RsvgHandle, dpi::Float64)
+    ccall((:rsvg_handle_set_dpi, _jl_librsvg), Void,
+                (RsvgHandle,Float64), handle, dpi)
+end
 
 function rsvg_handle_render_cairo (cr::CairoContext, handle::RsvgHandle)
 	ccall((:rsvg_handle_render_cairo, _jl_librsvg), Bool,
@@ -92,6 +80,7 @@ function rsvg_handle_new_from_data (data::String,error::GError)
     RsvgHandle(ptr)
 end
 
+Rsvg.rsvg_set_default_dpi(72.0) 
 
 function test1(filename::String="draw1.svg")
 
@@ -127,17 +116,7 @@ function test3(filename::String="d.svg")
     # Cairo.write_to_png(cs,"b.png");
 end
 
-
-@doc """
-test2() runs a predefinded string to rsvg_handle_new_from_data 
-""" ->
-
-function test2()
-    #using Rsvg
-    head = "<svg version=\"1.1\" fill=\"#"
-    f1 = "\"><path id=\"2\" d=\""
-    f2 = "\"></path> </svg>"
-    d = """
+testd0 = """
     M299.823,364.41h-87.646c-6.144,0-11.124,4.979-11.124,11.123c
     0,6.143,4.98,11.122,11.124,11.122h87.647c6.143,0,11.123-4.979,11.123-11.122C
     310.947,369.39,305.967,364.41,299.823,364.41z M297.822,401.443h
@@ -152,6 +131,26 @@ function test2()
     129.379,9.598,382.621,9.433,382.621,171.454z
     """    
 
+testd1 = """
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400pt" height="400pt" viewBox="0 0 400 400" version="1.1">
+<g id="surface1">
+<path style="fill:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 20 20 L 380 380 "/>
+</g>
+</svg>
+"""
+
+
+@doc """
+test2() runs a predefinded string to rsvg_handle_new_from_data 
+""" ->
+
+function test2()
+    #using Rsvg
+    head = "<svg version=\"1.1\" fill=\"#"
+    f1 = "\"><path id=\"2\" d=\""
+    f2 = "\"></path> </svg>"
+    d = Rsvg.testd0
     r = Rsvg.rsvg_handle_new_from_data(head * "ff00ff" * f1 * d * f2,Rsvg.GError(0,0,0));
     cs = Cairo.CairoImageSurface(600,600,Cairo.FORMAT_ARGB32);
     c = Cairo.CairoContext(cs);
@@ -167,10 +166,13 @@ function test4(filename::String="d.svg")
          nothing
     end
 
+
+
     r = Rsvg.rsvg_handle_new_from_file(filename,Rsvg.GError(0,0,0));
     d = RsvgDimensionData(1,1,1,1);
     Rsvg.rsvg_handle_get_dimensions(r,d);
 
+    #Rsvg.rsvg_set_dpi(0.0)
     # 
     d0 = split(filename,".")
     d1 = d0[1] * "_rt." * d0[2]
@@ -179,10 +181,8 @@ function test4(filename::String="d.svg")
     Rsvg.rsvg_handle_render_cairo(c,r);
     Cairo.finish(cs);
 
-    c,cs
+    c,cs,d
     
-# end
     end
-
              
 end                                             
