@@ -41,7 +41,7 @@ end
 
 RsvgDimensionData() = RsvgDimensionData(0,0,0,0)
 
-function rsvg_handle_get_dimensions(handle::RsvgHandle, dimension_data::RsvgDimensionData)
+function handle_get_dimensions(handle::RsvgHandle, dimension_data::RsvgDimensionData)
     ccall((:rsvg_handle_get_dimensions, _jl_librsvg), Void,
                 (RsvgHandle,Ptr{RsvgDimensionData}), handle, &dimension_data)
 end
@@ -52,35 +52,35 @@ end
 # rsvg_handle_set_dpi (RsvgHandle *handle,
 #                      double dpi);
 
-function rsvg_set_default_dpi(dpi::Float64)
+function set_default_dpi(dpi::Float64)
     ccall((:rsvg_set_default_dpi, _jl_librsvg), Void,
                 (Float64,), dpi)
 end
 
 
-function rsvg_handle_set_dpi(handle::RsvgHandle, dpi::Float64)
+function handle_set_dpi(handle::RsvgHandle, dpi::Float64)
     ccall((:rsvg_handle_set_dpi, _jl_librsvg), Void,
                 (RsvgHandle,Float64), handle, dpi)
 end
 
-function rsvg_handle_render_cairo (cr::CairoContext, handle::RsvgHandle)
+function handle_render_cairo (cr::CairoContext, handle::RsvgHandle)
 	ccall((:rsvg_handle_render_cairo, _jl_librsvg), Bool,
                 (RsvgHandle,Ptr{Void}), handle, cr.ptr)
 end
 
-function rsvg_handle_new_from_file (filename::String,error::GError)
+function handle_new_from_file (filename::String,error::GError)
     ptr = ccall((:rsvg_handle_new_from_file, _jl_librsvg), Ptr{Void},
                 (Ptr{Uint8},GError), bytestring(filename), error)
     RsvgHandle(ptr)
 end
 
-function rsvg_handle_new_from_data (data::String,error::GError)
+function handle_new_from_data (data::String,error::GError)
     ptr = ccall((:rsvg_handle_new_from_data, _jl_librsvg), Ptr{Void},
                 (Ptr{Uint8},Uint32,GError), bytestring(data), length(data),error)
     RsvgHandle(ptr)
 end
 
-Rsvg.rsvg_set_default_dpi(72.0) 
+Rsvg.set_default_dpi(72.0) 
 
 function test1(filename::String="draw1.svg")
 
@@ -90,10 +90,10 @@ function test1(filename::String="draw1.svg")
          nothing
     end
 
-    r = Rsvg.rsvg_handle_new_from_file(filename,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_file(filename,Rsvg.GError(0,0,0));
     cs = Cairo.CairoImageSurface(600,600,Cairo.FORMAT_ARGB32);
     c = Cairo.CairoContext(cs);
-    Rsvg.rsvg_handle_render_cairo(c,r);
+    Rsvg.handle_render_cairo(c,r);
     Cairo.write_to_png(cs,"b.png");
 end
 
@@ -105,10 +105,10 @@ function test3(filename::String="d.svg")
          nothing
     end
 
-    r = Rsvg.rsvg_handle_new_from_file(filename,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_file(filename,Rsvg.GError(0,0,0));
     d = RsvgDimensionData(1,1,1,1);
 
-    Rsvg.rsvg_handle_get_dimensions(r,d);
+    Rsvg.handle_get_dimensions(r,d);
     d
     # cs = Cairo.CairoImageSurface(600,600,Cairo.FORMAT_ARGB32);
     # c = Cairo.CairoContext(cs);
@@ -151,10 +151,10 @@ function test2()
     f1 = "\"><path id=\"2\" d=\""
     f2 = "\"></path> </svg>"
     d = Rsvg.testd0
-    r = Rsvg.rsvg_handle_new_from_data(head * "ff00ff" * f1 * d * f2,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_data(head * "ff00ff" * f1 * d * f2,Rsvg.GError(0,0,0));
     cs = Cairo.CairoImageSurface(600,600,Cairo.FORMAT_ARGB32);
     c = Cairo.CairoContext(cs);
-    Rsvg.rsvg_handle_render_cairo(c,r);
+    Rsvg.handle_render_cairo(c,r);
     Cairo.write_to_png(cs,"b.png");
     end
 
@@ -168,9 +168,9 @@ function test4(filename::String="d.svg")
 
 
 
-    r = Rsvg.rsvg_handle_new_from_file(filename,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_file(filename,Rsvg.GError(0,0,0));
     d = RsvgDimensionData(1,1,1,1);
-    Rsvg.rsvg_handle_get_dimensions(r,d);
+    Rsvg.handle_get_dimensions(r,d);
 
     #Rsvg.rsvg_set_dpi(0.0)
     # 
@@ -178,7 +178,7 @@ function test4(filename::String="d.svg")
     d1 = d0[1] * "_rt." * d0[2]
     cs = Cairo.CairoSVGSurface(d1,d.width,d.height);
     c = Cairo.CairoContext(cs);
-    Rsvg.rsvg_handle_render_cairo(c,r);
+    Rsvg.handle_render_cairo(c,r);
     Cairo.finish(cs);
 
     c,cs,d
