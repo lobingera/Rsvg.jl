@@ -24,8 +24,12 @@ function handle_new_from_file(filename::String,error::GError)
     RsvgHandle(ptr)
 end
 
+handle_new_from_file(filename::String) = handle_new_from_file(filename::String,GError(0,0,0))
+
 function handle_new_from_data(data::String,error::GError)
     ptr = ccall((:rsvg_handle_new_from_data, _jl_librsvg), Ptr{Void},
                 (Ptr{Uint8},Uint32,GError), bytestring(data), length(data),error)
     RsvgHandle(ptr)
 end
+
+handle_new_from_data(data::String) = handle_new_from_data(data::String,GError(0,0,0))

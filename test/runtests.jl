@@ -40,6 +40,18 @@ f = tempname() * ".png"
 test_render_to_png(joinpath(pkg_dir,"data","star.svg"),f);
 @test stat(f).size > 0
 
+@printf("\nTest: render string to png")
 
+f = tempname() * ".png"
+test_render_string_to_png(f);
+@test stat(f).size > 0
+
+@printf("\nTest: roundtrip, render svg to svg")
+
+f = tempname() * ".svg"
+test_roundtrip(joinpath(pkg_dir,"data","lotus.svg"),f);
+@test stat(f).size > 0
+d = test_get_dimension(f);
+@test (d.height == 720) & (d.width == 576)
 
 @printf("\n");

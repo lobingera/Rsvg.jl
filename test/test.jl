@@ -7,7 +7,7 @@ function test_render_to_png(filename_in::AbstractString="draw1.svg",
          nothing
     end
 
-    r = Rsvg.handle_new_from_file(filename_in,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_file(filename_in);
     cs = Cairo.CairoImageSurface(600,600,Cairo.FORMAT_ARGB32);
     c = Cairo.CairoContext(cs);
     Rsvg.handle_render_cairo(c,r);
@@ -22,13 +22,14 @@ function test_get_dimension(filename_in::String="d.svg")
          nothing
     end
 
-    r = Rsvg.handle_new_from_file(filename_in,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_file(filename_in);
     d = Rsvg.RsvgDimensionData(1,1,1,1);
 
     Rsvg.handle_get_dimensions(r,d);
     d
 end
 
+# test data, icon of a light bulb, path data only
 testd0 = """
     M299.823,364.41h-87.646c-6.144,0-11.124,4.979-11.124,11.123c
     0,6.143,4.98,11.122,11.124,11.122h87.647c6.143,0,11.123-4.979,11.123-11.122C
@@ -44,27 +45,18 @@ testd0 = """
     129.379,9.598,382.621,9.433,382.621,171.454z
     """    
 
-testd1 = """
-<?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="400pt" height="400pt" viewBox="0 0 400 400" version="1.1">
-<g id="surface1">
-<path style="fill:none;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke:rgb(0%,0%,0%);stroke-opacity:1;stroke-miterlimit:10;" d="M 20 20 L 380 380 "/>
-</g>
-</svg>
-"""
-
 function test_render_string_to_png(output::String="b.png",content_string::String=testd0)
     head = "<svg version=\"1.1\" fill=\"#"
     f1 = "\"><path id=\"2\" d=\""
     f2 = "\"></path> </svg>"
-    r = Rsvg.handle_new_from_data(head * "ff00ff" * f1 * content_string * f2,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_data(head * "ff00ff" * f1 * content_string * f2);
     cs = Cairo.CairoImageSurface(600,600,Cairo.FORMAT_ARGB32);
     c = Cairo.CairoContext(cs);
     Rsvg.handle_render_cairo(c,r);
     Cairo.write_to_png(cs,output);
     end
 
-function test_roundtrip(filename::String="d.svg")
+function test_roundtrip(filename_in::String,filename_out::String)
 
     # file should be available
     if Base.stat(filename_in).size == 0
@@ -72,14 +64,14 @@ function test_roundtrip(filename::String="d.svg")
          nothing
     end
 
-    r = Rsvg.handle_new_from_file(filename_in,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_file(filename_in);
     d = RsvgDimensionData(1,1,1,1);
     Rsvg.handle_get_dimensions(r,d);
 
-    d0 = split(filename_in,".")
-    filename_out = d0[1] * "_rt." * d0[2]
+    #d0 = split(filename_in,".")
+    #filename_out = d0[1] * "_rt." * d0[2]
 
-    @printf("input file %s, output file %s\n",filename_in,filename_out)
+   # @printf("input file %s, output file %s\n",filename_in,filename_out)
 
     cs = Cairo.CairoSVGSurface(filename_out,d.width,d.height);
     c = Cairo.CairoContext(cs);
