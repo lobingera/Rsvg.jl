@@ -3,7 +3,7 @@ type RsvgHandle
 	    
     function RsvgHandle(ptr::Ptr{Void})
         self = new(ptr)
-        finalizer(self, destroy)
+        #finalizer(self, destroy)
         self
     end
 end

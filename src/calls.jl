@@ -13,18 +13,18 @@ function handle_set_dpi(handle::RsvgHandle, dpi::Float64)
                 (RsvgHandle,Float64), handle, dpi)
 end
 
-function handle_render_cairo (cr::CairoContext, handle::RsvgHandle)
+function handle_render_cairo(cr::CairoContext, handle::RsvgHandle)
 	ccall((:rsvg_handle_render_cairo, _jl_librsvg), Bool,
                 (RsvgHandle,Ptr{Void}), handle, cr.ptr)
 end
 
-function handle_new_from_file (filename::String,error::GError)
+function handle_new_from_file(filename::String,error::GError)
     ptr = ccall((:rsvg_handle_new_from_file, _jl_librsvg), Ptr{Void},
                 (Ptr{Uint8},GError), bytestring(filename), error)
     RsvgHandle(ptr)
 end
 
-function handle_new_from_data (data::String,error::GError)
+function handle_new_from_data(data::String,error::GError)
     ptr = ccall((:rsvg_handle_new_from_data, _jl_librsvg), Ptr{Void},
                 (Ptr{Uint8},Uint32,GError), bytestring(data), length(data),error)
     RsvgHandle(ptr)

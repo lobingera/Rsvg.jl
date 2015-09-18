@@ -1,28 +1,29 @@
-function test_render_to_png(filename::String="draw1.svg",output::String="b.png")
+function test_render_to_png(filename_in::AbstractString="draw1.svg",
+    filename_out::AbstractString="b.png")
 
     # file should be available
-    if Base.stat(filename).size == 0
-         error(@sprintf("%s : file not found",filename));
+    if Base.stat(filename_in).size == 0
+         error(@sprintf("%s : file not found",filename_in));
          nothing
     end
 
-    r = Rsvg.handle_new_from_file(filename,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_file(filename_in,Rsvg.GError(0,0,0));
     cs = Cairo.CairoImageSurface(600,600,Cairo.FORMAT_ARGB32);
     c = Cairo.CairoContext(cs);
     Rsvg.handle_render_cairo(c,r);
-    Cairo.write_to_png(cs,output);
+    Cairo.write_to_png(cs,filename_out);
 end
 
-function test_get_dimension(filename::String="d.svg")
+function test_get_dimension(filename_in::String="d.svg")
 
     # file should be available
-    if Base.stat(filename).size == 0
-         error(@sprintf("%s : file not found",filename));
+    if Base.stat(filename_in).size == 0
+         error(@sprintf("%s : file not found",filename_in));
          nothing
     end
 
-    r = Rsvg.handle_new_from_file(filename,Rsvg.GError(0,0,0));
-    d = RsvgDimensionData(1,1,1,1);
+    r = Rsvg.handle_new_from_file(filename_in,Rsvg.GError(0,0,0));
+    d = Rsvg.RsvgDimensionData(1,1,1,1);
 
     Rsvg.handle_get_dimensions(r,d);
     d
@@ -52,45 +53,38 @@ testd1 = """
 </svg>
 """
 
-
-@doc """
-test2() runs a predefinded string to rsvg_handle_new_from_data 
-""" ->
-function test_render_string_to_png(output::String="b.png")
-    #using Rsvg
+function test_render_string_to_png(output::String="b.png",content_string::String=testd0)
     head = "<svg version=\"1.1\" fill=\"#"
     f1 = "\"><path id=\"2\" d=\""
     f2 = "\"></path> </svg>"
-    d = Rsvg.testd0
-    r = Rsvg.handle_new_from_data(head * "ff00ff" * f1 * d * f2,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_data(head * "ff00ff" * f1 * content_string * f2,Rsvg.GError(0,0,0));
     cs = Cairo.CairoImageSurface(600,600,Cairo.FORMAT_ARGB32);
     c = Cairo.CairoContext(cs);
     Rsvg.handle_render_cairo(c,r);
     Cairo.write_to_png(cs,output);
     end
 
-@doc """
-test4: run a (named) file through Rsvg and output a .svg (via Cairo)
-""" ->
 function test_roundtrip(filename::String="d.svg")
 
     # file should be available
-    if Base.stat(filename).size == 0
-         error(@sprintf("%s : file not found",filename));
+    if Base.stat(filename_in).size == 0
+         error(@sprintf("%s : file not found",filename_in));
          nothing
     end
 
-    r = Rsvg.handle_new_from_file(filename,Rsvg.GError(0,0,0));
+    r = Rsvg.handle_new_from_file(filename_in,Rsvg.GError(0,0,0));
     d = RsvgDimensionData(1,1,1,1);
     Rsvg.handle_get_dimensions(r,d);
 
-    d0 = split(filename,".")
-    d1 = d0[1] * "_rt." * d0[2]
-    cs = Cairo.CairoSVGSurface(d1,d.width,d.height);
+    d0 = split(filename_in,".")
+    filename_out = d0[1] * "_rt." * d0[2]
+
+    @printf("input file %s, output file %s\n",filename_in,filename_out)
+
+    cs = Cairo.CairoSVGSurface(filename_out,d.width,d.height);
     c = Cairo.CairoContext(cs);
     Rsvg.handle_render_cairo(c,r);
     Cairo.finish(cs);
 
-    #c,cs,d
     nothing
     end
