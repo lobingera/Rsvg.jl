@@ -18,18 +18,18 @@ function handle_render_cairo(cr::CairoContext, handle::RsvgHandle)
                 (RsvgHandle,Ptr{Void}), handle, cr.ptr)
 end
 
-function handle_new_from_file(filename::String,error::GError)
+function handle_new_from_file(filename::AbstractString,error::GError)
     ptr = ccall((:rsvg_handle_new_from_file, _jl_librsvg), Ptr{Void},
-                (Ptr{Uint8},GError), bytestring(filename), error)
+                (Ptr{UInt8},GError), bytestring(filename), error)
     RsvgHandle(ptr)
 end
 
-handle_new_from_file(filename::String) = handle_new_from_file(filename::String,GError(0,0,0))
+handle_new_from_file(filename::AbstractString) = handle_new_from_file(filename::AbstractString,GError(0,0,0))
 
-function handle_new_from_data(data::String,error::GError)
+function handle_new_from_data(data::AbstractString,error::GError)
     ptr = ccall((:rsvg_handle_new_from_data, _jl_librsvg), Ptr{Void},
-                (Ptr{Uint8},Uint32,GError), bytestring(data), length(data),error)
+                (Ptr{UInt8},UInt32,GError), bytestring(data), length(data),error)
     RsvgHandle(ptr)
 end
 
-handle_new_from_data(data::String) = handle_new_from_data(data::String,GError(0,0,0))
+handle_new_from_data(data::AbstractString) = handle_new_from_data(data::AbstractString,GError(0,0,0))

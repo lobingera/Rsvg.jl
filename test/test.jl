@@ -14,7 +14,7 @@ function test_render_to_png(filename_in::AbstractString="draw1.svg",
     Cairo.write_to_png(cs,filename_out);
 end
 
-function test_get_dimension(filename_in::String="d.svg")
+function test_get_dimension(filename_in::AbstractString="d.svg")
 
     # file should be available
     if Base.stat(filename_in).size == 0
@@ -45,7 +45,7 @@ testd0 = """
     129.379,9.598,382.621,9.433,382.621,171.454z
     """    
 
-function test_render_string_to_png(output::String="b.png",content_string::String=testd0)
+function test_render_string_to_png(output::AbstractString="b.png",content_string::AbstractString=testd0)
     head = "<svg version=\"1.1\" fill=\"#"
     f1 = "\"><path id=\"2\" d=\""
     f2 = "\"></path> </svg>"
@@ -56,7 +56,7 @@ function test_render_string_to_png(output::String="b.png",content_string::String
     Cairo.write_to_png(cs,output);
     end
 
-function test_roundtrip(filename_in::String,filename_out::String)
+function test_roundtrip(filename_in::AbstractString,filename_out::AbstractString)
 
     # file should be available
     if Base.stat(filename_in).size == 0
