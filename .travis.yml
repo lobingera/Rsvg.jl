@@ -1,14 +1,24 @@
-# Documentation: http://docs.travis-ci.com/user/languages/julia/
 language: julia
+sudo: false
 os:
-  - linux
-  - osx
+    - linux
 julia:
-  - release
-  - nightly
+    - 0.4
 notifications:
-  email: false
-# uncomment the following lines to override the default test script
-#script:
-#  - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-#  - julia -e 'Pkg.clone(pwd()); Pkg.build("Rsvg"); Pkg.test("Rsvg"; coverage=true)'
+    email: false
+addons:
+    apt:
+        packages:
+            - xvfb
+            - xauth
+            - libgtk-3-0
+script:
+    - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
+    - xvfb-run julia -e 'Pkg.clone(pwd());
+          println(BinDeps.debug("Rsvg"));
+          Pkg.test("Rsvg"; coverage=true)'
+after_success:
+    - julia -e 'cd(Pkg.dir("Rsvg"));
+                Pkg.add("Coverage");
+                using Coverage;
+                Coveralls.submit(Coveralls.process_folder())'
