@@ -2,9 +2,14 @@ using BinDeps
 
 @BinDeps.setup
 
-#deps = [
-	rsvg = library_dependency("rsvg", aliases = ["librsvg"])
-#]
-@BinDeps.install [:rsvg => :_jl_librsvg ]
+rsvg = library_dependency("rsvg", aliases = ["librsvg","librsvg-2.so.2"])
+
+@linux_only begin
+    provides(AptGet, "librsvg2-2",rsvg)
+end
+
+@BinDeps.install Dict(:rsvg => :_jl_librsvg )
+
+
 
 
