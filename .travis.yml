@@ -15,6 +15,7 @@ addons:
 script:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
     - xvfb-run julia -e 'Pkg.clone(pwd());
+          Pkg.build("Rsvg");
           Pkg.test("Rsvg"; coverage=true)'
 after_success:
     - julia -e 'cd(Pkg.dir("Rsvg"));
