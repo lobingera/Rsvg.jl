@@ -8,7 +8,7 @@ rsvg = library_dependency("rsvg", aliases = ["librsvg","librsvg-2.so.2"])
     provides(AptGet, "librsvg2-2",rsvg)
 end
 
-@BinDeps.install Dict(:rsvg => :_jl_librsvg )
+@BinDeps.install Dict(:rsvg => :librsvg)
 
 
 
