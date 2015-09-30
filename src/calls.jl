@@ -3,6 +3,12 @@ function handle_get_dimensions(handle::RsvgHandle, dimension_data::RsvgDimension
                 (RsvgHandle,Ptr{RsvgDimensionData}), handle, &dimension_data)
 end
 
+function handle_get_dimensions(handle::RsvgHandle)
+    d = Rsvg.RsvgDimensionData(1,1,1,1);
+    handle_get_dimensions(handle, d);
+    d
+end
+
 function set_default_dpi(dpi::Float64)
     ccall((:rsvg_set_default_dpi, librsvg), Void,
                 (Float64,), dpi)
