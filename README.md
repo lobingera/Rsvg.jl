@@ -10,7 +10,9 @@ This is a subset of the full API, but the main points
 
 are available.
 
-(To be correct at this point: A full binding/adaptation should be done via GObject Introspection - which might be available in the future. This here is just ccalls to solve svg to cairo import problems...)
+(To be correct at this point: A full binding/adaptation should be done via GObject Introspection - which might be available in the future. This here is just ccalls to solve sv to cairo import problems...)
+
+Note on API: nothing is exported, you need to prefix Rsvg.callsomething
 
 Usage
 =====
@@ -28,3 +30,25 @@ c = Cairo.CairoContext(cs);
 Rsvg.handle_render_cairo(c,r);
 Cairo.write_to_png(cs,filename_out);
 ```
+API
+===
+```
+handle_get_dimensions(handle::RsvgHandle, dimension_data::RsvgDimensionData)
+dimension_data = handle_get_dimensions(handle::RsvgHandle)
+set_default_dpi(dpi::Float64)
+handle_set_dpi(handle::RsvgHandle, dpi::Float64)
+handle_render_cairo(cr::CairoContext, handle::RsvgHandle)
+handle_new_from_file(filename::AbstractString,error::GError)
+handle_new_from_file(filename::AbstractString)
+handle_new_from_data(data::AbstractString,error::GError)
+handle_new_from_data(data::AbstractString)
+```
+
+Some Notes on Error Handling
+============================
+There is none. You'll get all kinds of errors (missing something) via the GLib internals. 
+
+Interaction with other GLib based libraries
+===========================================
+librsvg is usually used in a Gnome/GLib context. Some of the features therefore depend on availability of a GLib as shared resource, especially memory management. This package e.g. depends for destroying RsvgHandles on GLib infrastructure and strange things can happen if you manage to load 2 different GLib instances. As long as you use Rsvg along Gtk.jl and Cairo.jl you should be fine.
+

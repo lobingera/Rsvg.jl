@@ -1,3 +1,7 @@
+
+"""
+RsvgHandle is a container for the actual GLib pointer to datastructure
+"""
 type RsvgHandle 
 	ptr::Ptr{Void}
 	    
@@ -19,6 +23,13 @@ end
 
 GError = Gtk.GLib.GError
 
+"""
+RsvgDimensionData is a simple struct of 
+    width::Int32
+    height::Int32
+    em::Float64
+    ex::Float64
+"""
 type RsvgDimensionData
     width::Int32
     height::Int32
