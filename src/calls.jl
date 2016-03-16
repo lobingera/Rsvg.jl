@@ -45,7 +45,7 @@ handle_new_from_file(filename::AbstractString,error::GError)
 """
 function handle_new_from_file(filename::AbstractString,error::GError)
     ptr = ccall((:rsvg_handle_new_from_file, librsvg), Ptr{Void},
-                (Ptr{UInt8},GError), bytestring(filename), error)
+                (Cstring,GError), bytestring(filename), error)
     RsvgHandle(ptr)
 end
 
@@ -59,7 +59,7 @@ handle_new_from_data(data::AbstractString,error::GError)
 """
 function handle_new_from_data(data::AbstractString,error::GError)
     ptr = ccall((:rsvg_handle_new_from_data, librsvg), Ptr{Void},
-                (Ptr{UInt8},UInt32,GError), bytestring(data), length(data),error)
+                (Ptr{UInt8},UInt32,GError), bytestring(data), sizeof(data),error)
     RsvgHandle(ptr)
 end
 
