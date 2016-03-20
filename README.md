@@ -1,7 +1,7 @@
 Rsvg.jl
 =======
 
-[![Build Status](https://travis-ci.org/lobingera/Rsvg.jl.svg?branch=master)](https://travis-ci.org/lobingera/Rsvg.jl.svg)
+[![Build Status](https://travis-ci.org/lobingera/Rsvg.jl.svg?branch=master)](https://travis-ci.org/lobingera/Rsvg.jl)
 
 Adaptation of the [librsvg](https://wiki.gnome.org/LibRsvg?action=show]).
 
