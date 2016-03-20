@@ -1,6 +1,8 @@
 Rsvg.jl
 =======
 
+[![Build Status](https://travis-ci.org/lobingera/Rsvg.jl.svg?branch=master)](https://travis-ci.org/lobingera/Rsvg.jl.svg)
+
 Adaptation of the [librsvg](https://wiki.gnome.org/LibRsvg?action=show]).
 
 This is a subset of the full API, but the main points
