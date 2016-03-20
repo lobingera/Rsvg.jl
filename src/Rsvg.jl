@@ -1,7 +1,9 @@
 
 module Rsvg
 
-include("../deps/deps.jl")
+depsjl = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
+isfile(depsjl) ? include(depsjl) : error("Rsvg not properly ",
+    "installed. Please run\nPkg.build(\"Rsvg\")")
 
 using Cairo
 using Gtk
