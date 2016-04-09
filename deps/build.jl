@@ -13,4 +13,9 @@ end
     provides(Homebrew.HB, "librsvg", [rsvg], os=:Darwin)
 end
 
+@windows_only begin
+    using WinRPM
+    provides(WinRPM.RPM,"librsvg-2-2",rsvg,os = :Windows)
+end
+
 @BinDeps.install Dict(:rsvg => :librsvg)
