@@ -2,10 +2,8 @@ language: julia
 sudo: false
 os:
     - linux
-    - osx
 julia:
     - 0.4
-    - nightly
 notifications:
     email: false
 addons:
