@@ -1,11 +1,10 @@
 language: julia
 sudo: false
+matrix:
 os:
     - linux
 julia:
     - 0.4
-   allow_failures:
-    - nightly
 notifications:
     email: false
 addons:
