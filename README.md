@@ -5,7 +5,7 @@ Rsvg.jl
 [![Rsvg](http://pkg.julialang.org/badges/Rsvg_0.4.svg)](http://pkg.julialang.org/?pkg=Rsvg)
 [![Rsvg](http://pkg.julialang.org/badges/Rsvg_0.5.svg)](http://pkg.julialang.org/?pkg=Rsvg)
 
-Adaptation of the [librsvg](https://wiki.gnome.org/LibRsvg?action=show]).
+Adaptation of the [librsvg](https://wiki.gnome.org/LibRsvg?action=show).
 
 This is a subset of the full API, but the main points
 
