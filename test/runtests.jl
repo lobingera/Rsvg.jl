@@ -6,7 +6,7 @@ using Base.Test
 
 include("test.jl")
 
-pkg_dir = Pkg.dir("Rsvg")
+pkg_dir = dirname(dirname(@__FILE__))
 
 @printf("\nTest: dimension of known images")
 
