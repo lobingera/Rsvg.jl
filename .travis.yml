@@ -1,12 +1,12 @@
 language: julia
 sudo: false
-matrix:
 os:
-    - linux
+  - linux
+  - osx
 julia:
-    - 0.4
-    - 0.5
-    - nightly
+  - 0.4
+  - 0.5
+  - nightly
 notifications:
     email: false
 addons:
@@ -17,7 +17,9 @@ addons:
             - libgtk-3-0
 script:
     - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-    - xvfb-run julia -e 'Pkg.clone(pwd());
+    - if [[ `uname` = "Linux" ]]; then TESTCMD="xvfb-run julia"; else TESTCMD="julia"; fi
+    - $TESTCMD -e 'Pkg.clone(pwd()); using BinDeps;
+          println(BinDeps.debug("Rsvg"));
           Pkg.build("Rsvg");
           Pkg.test("Rsvg"; coverage=true)'
 after_success:
@@ -25,3 +27,6 @@ after_success:
                 Pkg.add("Coverage");
                 using Coverage;
                 Coveralls.submit(Coveralls.process_folder())'
+    # update the documentation
+    - julia -e 'Pkg.add("Documenter"); Pkg.checkout("Documenter")'
+    - $TESTCMD -e 'cd(Pkg.dir("Rsvg")); ENV["DOCUMENTER_DEBUG"] = "true"; include(joinpath("docs", "make.jl"))'
