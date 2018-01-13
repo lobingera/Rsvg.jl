@@ -1,4 +1,4 @@
-
+__precompile__()
 module Rsvg
 
 depsjl = joinpath(dirname(@__FILE__), "..", "deps", "deps.jl")
@@ -13,7 +13,10 @@ include("calls.jl")
 
 export RsvgDimensionData, RsvgHandle
 
-Rsvg.set_default_dpi(72.0) 
+
+function __init__()
+	Rsvg.set_default_dpi(72.0) 
+end
 
 end # module                                            
 

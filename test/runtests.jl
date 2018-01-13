@@ -2,27 +2,40 @@ using Rsvg
 using Cairo
 using Gtk
 
+
 using Base.Test
 
 include("test.jl")
 
 pkg_dir = dirname(dirname(@__FILE__))
 
-@printf("\nTest: dimension of known images")
+
+@testset "dimensions of known images  " begin
 
 d = test_get_dimension(joinpath(pkg_dir,"data","mulberry.svg"));
-@test (d.height == 512) & (d.width == 513)
+
+@test d.height == 512
+@test d.width == 513
 
 d = test_get_dimension(joinpath(pkg_dir,"data","diag.svg"));
-@test (d.height == 400) & (d.width == 400)
+
+@test d.height == 400
+@test d.width == 400
 
 d = test_get_dimension(joinpath(pkg_dir,"data","lotus.svg"));
-@test (d.height == 720) & (d.width == 576)
+
+@test d.height == 720
+@test d.width == 576
 
 d = test_get_dimension(joinpath(pkg_dir,"data","star.svg"));
-@test (d.height == 198) & (d.width == 224)
 
-@printf("\nTest: render to png")
+@test d.height == 198
+@test d.width == 224
+
+end
+
+
+@testset "render to png               " begin
 
 f = tempname() * ".png"
 test_render_to_png(joinpath(pkg_dir,"data","mulberry.svg"),f);
@@ -40,18 +53,26 @@ f = tempname() * ".png"
 test_render_to_png(joinpath(pkg_dir,"data","star.svg"),f);
 @test stat(f).size > 0
 
-@printf("\nTest: render string to png")
+end
+
+
+@testset "render string to png        " begin
 
 f = tempname() * ".png"
 test_render_string_to_png(f);
 @test stat(f).size > 0
 
-@printf("\nTest: roundtrip, render svg to svg")
+end
+
+@testset "roundtrip, render svg to svg" begin
 
 f = tempname() * ".svg"
 test_roundtrip(joinpath(pkg_dir,"data","lotus.svg"),f);
-@test stat(f).size > 0
-d = test_get_dimension(f);
-@test (d.height == 720) & (d.width == 576)
 
-@printf("\n");
+@test stat(f).size > 0
+
+d = test_get_dimension(f);
+@test d.height == 720
+@test d.width == 576
+
+end
