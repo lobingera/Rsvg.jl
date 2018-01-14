@@ -2,8 +2,7 @@ Rsvg.jl
 =======
 
 [![Build Status](https://travis-ci.org/lobingera/Rsvg.jl.svg?branch=master)](https://travis-ci.org/lobingera/Rsvg.jl)
-[![Rsvg](http://pkg.julialang.org/badges/Rsvg_0.4.svg)](http://pkg.julialang.org/?pkg=Rsvg)
-[![Rsvg](http://pkg.julialang.org/badges/Rsvg_0.5.svg)](http://pkg.julialang.org/?pkg=Rsvg)
+[![Rsvg](http://pkg.julialang.org/badges/Rsvg_0.6.svg)](http://pkg.julialang.org/?pkg=Rsvg)
 
 Adaptation of the [librsvg](https://wiki.gnome.org/LibRsvg?action=show).
 
