@@ -67,3 +67,10 @@ end
 handle_new_from_data(data::AbstractString)
 """
 handle_new_from_data(data::AbstractString) = handle_new_from_data(data::AbstractString,GError(0,0,0))
+
+"""
+handle_free(handle::RsvgHandle)
+"""
+function handle_free(handle::RsvgHandle)
+    ccall((:rsvg_handle_free,librsvg), Void, (RsvgHandle,), handle)
+end
