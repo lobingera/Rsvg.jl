@@ -12,16 +12,14 @@ type RsvgHandle
     end
 end
 
-function destroy(handle::RsvgHandle)
-    if handle.ptr == C_NULL
-        return
-    end
-    Gtk.GLib.gc_unref(handle)
-    handle.ptr = C_NULL
-    nothing
-end
-
-GError = Gtk.GLib.GError
+# function destroy(handle::RsvgHandle)
+#     if handle.ptr == C_NULL
+#         return
+#     end
+#     Gtk.GLib.gc_unref(handle)
+#     handle.ptr = C_NULL
+#     nothing
+# end
 
 """
 RsvgDimensionData is a simple struct of 

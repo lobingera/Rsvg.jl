@@ -1,6 +1,5 @@
 using Rsvg
 using Cairo
-using Gtk
 
 
 using Base.Test
