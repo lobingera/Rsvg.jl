@@ -6,8 +6,8 @@ isfile(depsjl) ? include(depsjl) : error("Rsvg not properly ",
     "installed. Please run\nPkg.build(\"Rsvg\")")
 
 using Cairo
-using Gtk
 
+include("gerror.jl")
 include("types.jl")
 include("calls.jl")
 
