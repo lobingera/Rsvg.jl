@@ -1,8 +1,9 @@
 using Rsvg
 using Cairo
+using Printf
 
 
-using Base.Test
+using Test
 
 include("test.jl")
 
