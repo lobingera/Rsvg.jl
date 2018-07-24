@@ -7,7 +7,7 @@ mutable struct RsvgHandle
 	    
     function RsvgHandle(ptr::Ptr{Nothing})
         self = new(ptr)
-        finalizer(destroy, self)
+        @compat finalizer(destroy, self)
         self
     end
 end

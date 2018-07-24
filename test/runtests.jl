@@ -1,9 +1,10 @@
 using Rsvg
+using Compat
 using Cairo
-using Printf
+using Compat.Printf
 
 
-using Test
+using Compat.Test
 
 include("test.jl")
 
