@@ -1,36 +1,27 @@
-language: julia
-sudo: required 
-os:
-  - linux
-  - osx
-julia:
-  - 0.6
-  - 0.7
-  - 1.0
-  - nightly
 matrix:
-  allow_failure:
-    - julia: nightly  
+    include:
+       - language: julia
+         julia: 0.6
+         os: linux
+       - language: julia
+         julia: 0.7
+         os: linux
+       - language: julia
+         julia: 1.0
+         os: linux
+
+       - language: julia
+         julia: 0.6
+         os: osx
+       - language: julia
+         julia: 0.7
+         os: osx
+       - language: julia
+         julia: 1.0
+         os: osx
+    allow_failures:
+       - julia: 1.0
 notifications:
     email: false
-addons:
-    apt:
-        packages:
-            - xvfb
-            - xauth
-            - libgtk-3-0
-script:
-    - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
-    - if [[ `uname` = "Linux" ]]; then TESTCMD="xvfb-run julia"; else TESTCMD="julia"; fi
-    - $TESTCMD -e 'Pkg.clone(pwd()); using BinDeps;
-          println(BinDeps.debug("Rsvg"));
-          Pkg.build("Rsvg");
-          Pkg.test("Rsvg"; coverage=true)'
 after_success:
-    - julia -e 'cd(Pkg.dir("Rsvg"));
-                Pkg.add("Coverage");
-                using Coverage;
-                Coveralls.submit(Coveralls.process_folder())'
-    # update the documentation
-    - julia -e 'Pkg.add("Documenter"); Pkg.checkout("Documenter")'
-    - $TESTCMD -e 'cd(Pkg.dir("Rsvg")); ENV["DOCUMENTER_DEBUG"] = "true"; include(joinpath("docs", "make.jl"))'
+    - julia -e 'VERSION>=v"0.7-"&&using Pkg; cd(Pkg.dir("Rsvg")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
