@@ -1,26 +1,14 @@
+language: julia
+os:
+  - linux
+  - osx
+julia:
+  - 0.7
+  - 1.0
+  - nightly
 matrix:
-    include:
-       - language: julia
-         julia: 0.6
-         os: linux
-       - language: julia
-         julia: 0.7
-         os: linux
-       - language: julia
-         julia: 1.0
-         os: linux
-
-       - language: julia
-         julia: 0.6
-         os: osx
-       - language: julia
-         julia: 0.7
-         os: osx
-       - language: julia
-         julia: 1.0
-         os: osx
-    allow_failures:
-       - julia: 1.0
+  allow_failures:
+  - julia: nightly
 notifications:
     email: false
 after_success:
