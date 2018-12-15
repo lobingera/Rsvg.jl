@@ -8,6 +8,7 @@ isfile(depsjl) ? include(depsjl) : error("Rsvg not properly ",
 using Cairo, Compat
 
 include("gerror.jl")
+include("gio.jl")
 include("types.jl")
 include("calls.jl")
 

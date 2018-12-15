@@ -4,10 +4,15 @@ using Compat
 
 @BinDeps.setup
 
+
 rsvg = library_dependency("rsvg", aliases = ["librsvg", "librsvg-2.2", "librsvg-2-2", "librsvg-2", "librsvg-2.so.2"])
+gio = library_dependency("gio", aliases = ["libgio-2.0", "libgio-2.0-0"])
+
+
 
 @static if Compat.Sys.islinux() begin
-        provides(AptGet, "librsvg2-2",rsvg)
+        provides(AptGet, "librsvg2-2", rsvg)
+        provides(AptGet, "libgio", gio)
     end
 end
 
@@ -23,4 +28,7 @@ end
     end
 end
 
-@BinDeps.install Dict(:rsvg => :librsvg)
+@BinDeps.install Dict([
+	(:rsvg => :librsvg),
+    (:gio, :libgio),
+])
