@@ -56,6 +56,44 @@ function test_render_string_to_png(output::AbstractString="b.png",content_string
     Cairo.write_to_png(cs,output);
     end
 
+testc0 = """
+    c -11.06653,0 -20.16601,9.09944 -20.16601,20.16604 0,11.0665 
+    9.09948,20.166 20.16601,20.166 11.06654,0 20.16602,-9.0995 
+    20.16602,-20.166 0,-11.0666 -9.09948,-20.16604 -20.16602,-20.16604 
+    z m 0,12.00004 c 4.58126,0 8.16602,3.5847 8.16602,8.166 0,4.5812 
+    -3.58476,8.166 -8.16602,8.166 -4.58125,0 -8.16601,-3.5848 
+    -8.16601,-8.166 0,-4.5813 3.58476,-8.166 8.16601,-8.166 z
+    """
+
+function test_render_long_string_to_png(content_length::Int,output::AbstractString="b.png")
+
+    sa = Array{AbstractString}(undef,2+(4*content_length))
+    r = rand(content_length,2)
+
+    sa[1] = "<svg version=\"1.1\" fill=\"#" *
+    "0088ff\" " *
+    "height=\"520\" width=\"520\" " *
+    ">" *
+    "<g>"
+
+    p = 1 # index into sa, p+=1 is post-increment
+
+    for k=1:content_length
+        sa[p+=1] = @sprintf("<path id=\"i%07d\" d=\"",k)
+        sa[p+=1] = @sprintf("M %13.6f,%13.6f",20.0 + 460.0*r[k,1],40.0 + 480.0*r[k,2])
+        sa[p+=1] = testc0
+        sa[p+=1] = "\"/> "
+    end
+    sa[p+=1] = "</g> </svg>"
+
+    r = Rsvg.handle_new_from_data(join(sa,'\n'));
+    cs = Cairo.CairoImageSurface(600,600,Cairo.FORMAT_ARGB32);
+    c = Cairo.CairoContext(cs);
+    Rsvg.handle_render_cairo(c,r);
+    Cairo.write_to_png(cs,output);
+    end
+
+
 function test_roundtrip(filename_in::AbstractString,filename_out::AbstractString)
 
     # file should be available
