@@ -26,7 +26,7 @@ end
 @static if Compat.Sys.iswindows() begin
         using WinRPM
         provides(WinRPM.RPM,"librsvg-2-2",rsvg,os = :Windows)
-        provides(WinRPM.RPM,"libgio-2.0-0",gio,os = :Windows)
+        provides(WinRPM.RPM,"glib2",gio,os = :Windows)
     end
 end
 
