@@ -1,5 +1,33 @@
 # collection of calls
 
+# /**
+#  * rsvg_handle_new_from_stream_sync:
+#  * @input_stream: a #GInputStream
+#  * @base_file: (allow-none): a #GFile, or %NULL
+#  * @flags: flags from #RsvgHandleFlags
+#  * @cancellable: (allow-none): a #GCancellable, or %NULL
+#  * @error: (allow-none): a location to store a #GError, or %NULL
+#  *
+#  * Creates a new #RsvgHandle for @stream.
+#  *
+#  * If @cancellable is not %NULL, then the operation can be cancelled by
+#  * triggering the cancellable object from another thread. If the
+#  * operation was cancelled, the error %G_IO_ERROR_CANCELLED will be
+#  * returned.
+#  *
+#  * Returns: a new #RsvgHandle on success, or %NULL with @error filled in
+#  *
+#  * Since: 2.32
+#  */
+# RsvgHandle *
+# rsvg_handle_new_from_stream_sync (GInputStream   *input_stream,
+#                                   GFile          *base_file,
+#                                   RsvgHandleFlags flags,
+#                                   GCancellable    *cancellable,
+#                                   GError         **error)
+# {
+
+
 """
 handle_get_dimensions(handle::RsvgHandle, dimension_data::RsvgDimensionData)
 """
@@ -66,11 +94,39 @@ end
 """
 handle_new_from_data(data::AbstractString)
 """
-handle_new_from_data(data::AbstractString) = handle_new_from_data(data::AbstractString,GError(0,0,0))
+function handle_new_from_data(data::AbstractString)
+
+    perr = Ref{Ptr{GError}}(C_NULL)
+
+    g_input_stream = Rsvg.glib_memory_input_stream_new_from_data(data)
+
+    ptr = ccall((:rsvg_handle_new_from_stream_sync, librsvg), Ptr{Nothing},
+        (GInputStream,Ptr{Nothing},UInt32,Ptr{Nothing},Ptr{Ptr{GError}}), 
+        g_input_stream,C_NULL,0,C_NULL,perr)
+
+
+    if ptr == C_NULL
+        err = unsafe_load(perr[])
+        message = unsafe_string(err.message)
+        ccall((:g_error_free, librsvg), Cvoid, (Ptr{GError},), perr[])
+        error(message)
+    end
+
+    RsvgHandle(ptr)
+end
+
 
 """
 handle_free(handle::RsvgHandle)
 """
 function handle_free(handle::RsvgHandle)
     ccall((:rsvg_handle_free,librsvg), Nothing, (RsvgHandle,), handle)
+end
+
+"""
+handle_free(handle::GInputStream)
+"""
+function handle_free(handle::GInputStream)
+    ccall((:g_input_stream_close,libgio), Nothing, 
+        (GInputStream,Ptr{Nothing},Ptr{Nothing}), handle,C_NULL,C_NULL)
 end

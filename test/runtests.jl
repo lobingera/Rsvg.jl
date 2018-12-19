@@ -63,6 +63,14 @@ f = tempname() * ".png"
 test_render_string_to_png(f);
 @test stat(f).size > 0
 
+f = tempname() * ".png"
+test_render_long_string_to_png(3000,f);
+@test stat(f).size > 0
+
+f = tempname() * ".png"
+test_render_long_string_to_png(60000,f);
+@test stat(f).size > 0
+
 end
 
 @testset "roundtrip, render svg to svg" begin
