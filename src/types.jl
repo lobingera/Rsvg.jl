@@ -2,12 +2,12 @@
 """
 RsvgHandle is a container for the actual GLib pointer to datastructure
 """
-mutable struct RsvgHandle 
+mutable struct RsvgHandle
 	ptr::Ptr{Nothing}
-	    
+
     function RsvgHandle(ptr::Ptr{Nothing})
         self = new(ptr)
-        @compat finalizer(destroy, self)
+        finalizer(destroy, self)
         self
     end
 end
@@ -22,7 +22,7 @@ function destroy(handle::RsvgHandle)
 end
 
 """
-RsvgDimensionData is a simple struct of 
+RsvgDimensionData is a simple struct of
     width::Int32
     height::Int32
     em::Float64

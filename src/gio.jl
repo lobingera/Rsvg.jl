@@ -18,10 +18,10 @@
 
 mutable struct GInputStream
 	ptr::Ptr{Nothing}
-	    
+
     function GInputStream(ptr::Ptr{Nothing})
         self = new(ptr)
-        @compat finalizer(destroy, self)
+        finalizer(destroy, self)
         self
     end
 end
