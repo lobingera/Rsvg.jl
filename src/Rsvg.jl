@@ -1,10 +1,8 @@
 module Rsvg
 
-depsjl = joinpath(@__DIR__, "..", "deps", "deps.jl")
-isfile(depsjl) ? include(depsjl) : error("Rsvg not properly ",
-    "installed. Please run\nPkg.build(\"Rsvg\")")
-
 using Cairo
+using Glib_jll
+using Librsvg_jll
 
 include("gerror.jl")
 include("gio.jl")
