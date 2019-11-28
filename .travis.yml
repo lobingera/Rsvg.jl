@@ -24,6 +24,4 @@ matrix:
       arch: arm64
 notifications:
     email: false
-
-after_success:
-    - julia -e 'using Pkg; cd(Pkg.dir("Rsvg")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
+coveralls: false
