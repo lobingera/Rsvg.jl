@@ -25,9 +25,5 @@ matrix:
 notifications:
     email: false
 
-script:
- - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
- - julia -e 'using Pkg; pkg"add https://github.com/staticfloat/Cairo.jl#sf/jll_pkg"; Pkg.build(verbose=true); Pkg.test(coverage=true)'
-
 after_success:
     - julia -e 'using Pkg; cd(Pkg.dir("Rsvg")); Pkg.add("Coverage"); using Coverage; Coveralls.submit(Coveralls.process_folder())'
