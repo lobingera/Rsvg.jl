@@ -7,7 +7,8 @@ const prefix = Prefix(get([a for a in ARGS if a != "--verbose"], 1, joinpath(@__
 # These are the two binary objects we care about
 products = Product[
     LibraryProduct(prefix, ["librsvg"], :librsvg),
-    LibraryProduct(prefix, ["libgio"], :libgio)
+    LibraryProduct(prefix, ["libgio"], :libgio),
+    LibraryProduct(prefix, ["libglib"], :libglib)
 ]
 
 dependencies = [

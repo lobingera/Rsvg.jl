@@ -101,14 +101,14 @@ function handle_new_from_data(data::AbstractString)
     g_input_stream = Rsvg.glib_memory_input_stream_new_from_data(data)
 
     ptr = ccall((:rsvg_handle_new_from_stream_sync, librsvg), Ptr{Nothing},
-        (GInputStream,Ptr{Nothing},UInt32,Ptr{Nothing},Ptr{Ptr{GError}}), 
+        (GInputStream,Ptr{Nothing},UInt32,Ptr{Nothing},Ptr{Ptr{GError}}),
         g_input_stream,C_NULL,0,C_NULL,perr)
 
 
     if ptr == C_NULL
         err = unsafe_load(perr[])
         message = unsafe_string(err.message)
-        ccall((:g_error_free, librsvg), Cvoid, (Ptr{GError},), perr[])
+        ccall((:g_error_free, libglib), Cvoid, (Ptr{GError},), perr[])
         error(message)
     end
 
@@ -127,6 +127,6 @@ end
 handle_free(handle::GInputStream)
 """
 function handle_free(handle::GInputStream)
-    ccall((:g_input_stream_close,libgio), Nothing, 
+    ccall((:g_input_stream_close,libgio), Nothing,
         (GInputStream,Ptr{Nothing},Ptr{Nothing}), handle,C_NULL,C_NULL)
 end
