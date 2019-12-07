@@ -7,7 +7,6 @@ arch:
   - x64
   - x86
 julia:
-  - 0.7
   - 1.0
   - 1.1
   - 1.2
@@ -17,9 +16,6 @@ matrix:
   exclude:
     - os: osx
       arch: x86
-    - os: windows
-      arch: x86
-      julia: 0.7
   allow_failures:
   - julia: nightly
 notifications:
