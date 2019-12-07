@@ -1,6 +1,6 @@
 name = "Rsvg"
 uuid = "c4c386cf-5103-5370-be45-f3a111cca3b8"
-version = "0.4.0"
+version = "0.3.0-DEV"
 
 [deps]
 Cairo = "159f3aea-2a34-519c-b102-8c37f9878175"
