@@ -36,3 +36,17 @@ mutable struct RsvgDimensionData
 end
 
 RsvgDimensionData() = RsvgDimensionData(0,0,0,0)
+
+"""
+RsvgRectangle is a simple struct of:
+    height::Float64
+    width::Float64
+    x::Float64
+    y::Float64
+"""
+mutable struct RsvgRectangle
+    height::Float64
+    width::Float64
+    x::Float64
+    y::Float64
+end

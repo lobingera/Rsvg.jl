@@ -69,6 +69,15 @@ function handle_render_cairo(cr::CairoContext, handle::RsvgHandle)
 end
 
 """
+handle_render_document(cr::CairoContext, handle::RsvgHandle, viewport::RsvgRectangle)
+"""
+function handle_render_cairo(cr::CairoContext, handle::RsvgHandle, viewport::RsvgRectangle)
+	ccall((:rsvg_handle_render_document, librsvg), Bool,
+        (RsvgHandle, Ptr{Nothing}, RsvgRectangle, Ptr{Nothing}), handle, cr.ptr, viewport, nothing)
+end
+
+
+"""
 handle_new_from_file(filename::AbstractString,error::GError)
 """
 function handle_new_from_file(filename::AbstractString,error::GError)
